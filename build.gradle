@@ -1,29 +1,14 @@
-buildscript {
-	ext {
-		artUrl = 'https://sres.web.boeing.com/artifactory/Maven-Releases/'
-		artUser = System.env.SRESUSER ?: sresUser
-		artPass = System.env.SRESAPIKEY ?: sresApiKey
-	}
-	repositories {
-		maven { 
-		credentials { 
-         username artUser 
-         password artPass 
-        } 
-		url artUrl
-	  }
-	}
-	
+plugins {
+	id "org.sonarqube" version "3.0"
+	id 'java'
+	id 'jacoco'
 }
-
-apply plugin: 'java'
-apply plugin: 'eclipse'
-
 
 
 group = 'in.srini.learn'
 version = '1.0.0'
 sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
 
 configurations {
 	developmentOnly
@@ -36,22 +21,38 @@ configurations {
 }
 
 repositories {
-	maven {  
-      credentials { 
-         username artUser 
-         password artPass 
-      } 
-      url artUrl 
-   } 
+   mavenCentral()
 }
 
 dependencies {
 	
-	compileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
+	compileOnly 'org.projectlombok:lombok:1.18.16'
+	annotationProcessor 'org.projectlombok:lombok:1.18.16'
+	
+	testCompileOnly 'org.projectlombok:lombok:1.18.16'
+	testAnnotationProcessor 'org.projectlombok:lombok:1.18.16'
 	
 }
 
 test {
 	useJUnitPlatform()
+    finalizedBy jacocoTestReport // report is always generated after tests run
+}
+
+jacoco {
+    toolVersion = "0.8.3"
+}
+
+jacocoTestReport {
+    dependsOn test // tests are required to run before generating the report
+}
+
+
+sonarqube {
+    properties {
+        property "sonar.exclusions", "**/*Generated.java"
+        property "sonar.host.url", "http://localhost:8888"
+        property "sonar.login", "admin"
+        property "sonar.password","bitnami"
+    }
 }
