@@ -1,0 +1,57 @@
+buildscript {
+	ext {
+		artUrl = 'https://sres.web.boeing.com/artifactory/Maven-Releases/'
+		artUser = System.env.SRESUSER ?: sresUser
+		artPass = System.env.SRESAPIKEY ?: sresApiKey
+	}
+	repositories {
+		maven { 
+		credentials { 
+         username artUser 
+         password artPass 
+        } 
+		url artUrl
+	  }
+	}
+	
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+
+
+
+group = 'in.srini.learn'
+version = '1.0.0'
+sourceCompatibility = '1.8'
+
+configurations {
+	developmentOnly
+	runtimeClasspath {
+		extendsFrom developmentOnly
+	}
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	maven {  
+      credentials { 
+         username artUser 
+         password artPass 
+      } 
+      url artUrl 
+   } 
+}
+
+dependencies {
+	
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+	
+}
+
+test {
+	useJUnitPlatform()
+}
