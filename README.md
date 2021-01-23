@@ -127,7 +127,7 @@
   - Using +" "+ for joing strings is not a good option due to multiple creation and deletion of strings in this process.. the more efficient way is to use string buffer
   - String buffer is synchronized 
   - String Builder is not synchronized and better than  string buffer
-  - ``` String joiner sj = new StringJoiner(", "); sj.add("one").add("two"); String s = sj.toString();```
+  - ``` StringJoiner sj = new StringJoiner(", "); sj.add("one").add("two"); String s = sj.toString();```
   - added in java8 more efficient and simpler way of concatinating string
   - can be directly used for string class String.join(", ","one","two","three");
 ### Java I/O enhancements
@@ -169,5 +169,5 @@
 
 ### Annotation
 - java 8 brings the concept of multiple annotation
-- @ Repeatable 
+- @Repeatable 
 - jav 8 allows annotation to be put on types - @NonNull
